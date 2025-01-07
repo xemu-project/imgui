@@ -6,9 +6,9 @@ project(
   meson_version: '>=0.50.0',
 )
 
-if host_machine.system() == 'darwin'
-  add_languages('objcpp')
-endif
+# if host_machine.system() == 'darwin'
+#   add_languages('objcpp')
+# endif
 
 include_dirs = include_directories('.', 'backends')
 sources = files(
@@ -77,11 +77,11 @@ if cpp.has_header('webgpu/webgpu.h', required: get_option('webgpu'))
 endif
 
 # platform backends
-glfw_dep = dependency('glfw3', required: get_option('glfw'))
-if glfw_dep.found()
-  sources += 'backends/imgui_impl_glfw.cpp'
-  dependencies += glfw_dep
-endif
+# glfw_dep = dependency('glfw3', required: get_option('glfw'))
+# if glfw_dep.found()
+#   sources += 'backends/imgui_impl_glfw.cpp'
+#   dependencies += glfw_dep
+# endif
 sdl2_dep = dependency('sdl2', required: get_option('sdl2'))
 if sdl2_dep.found()
   sources += 'backends/imgui_impl_sdl2.cpp'
@@ -92,15 +92,15 @@ if sdl3_dep.found()
   sources += 'backends/imgui_impl_sdl3.cpp'
   dependencies += sdl3_dep
 endif
-osx_dep = dependency('appleframeworks', modules: ['Carbon', 'Cocoa', 'GameController'], required: get_option('osx'))
-if osx_dep.found()
-  sources += 'backends/imgui_impl_osx.mm'
-endif
-win_dep = cpp.find_library('dwmapi', required: get_option('win'))
-if win_dep.found()
-  sources += 'backends/imgui_impl_win32.cpp'
-  dependencies += win_dep
-endif
+# osx_dep = dependency('appleframeworks', modules: ['Carbon', 'Cocoa', 'GameController'], required: get_option('osx'))
+# if osx_dep.found()
+#   sources += 'backends/imgui_impl_osx.mm'
+# endif
+# win_dep = cpp.find_library('dwmapi', required: get_option('win'))
+# if win_dep.found()
+#   sources += 'backends/imgui_impl_win32.cpp'
+#   dependencies += win_dep
+# endif
 
 # frameworks
 allegro5_dep = dependency('allegro-5', required: get_option('allegro5'))
