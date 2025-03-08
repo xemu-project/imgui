@@ -2,7 +2,7 @@ project(
   'imgui',
   'cpp',
   license: 'MIT',
-  version: '1.91.6',
+  version: '1.91.8',
   meson_version: '>=0.50.0',
 )
 
