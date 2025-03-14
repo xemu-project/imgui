@@ -654,6 +654,20 @@ static void ImGui_ImplSDL2_UpdateMouseData()
             // Single-viewport mode: mouse position in client window coordinates (io.MousePos is (0,0) when the mouse is on the upper-left corner of the app window)
             int window_x, window_y, mouse_x_global, mouse_y_global;
             SDL_GetGlobalMouseState(&mouse_x_global, &mouse_y_global);
+            #if defined(SDL_PLATFORM_MACOS)
+            // On macOS SDL3 no longer renders fullscreen windows into the notch area
+            // on devices with such hardware, but will still report the global mouse state relative
+            // to the entire display.
+            // This results in incorrect mouse location data, as the mouse should be reported
+            // relative to the drawable client area.
+            // To resolve this issue, SDL_GetMouseState() can be used.
+            uint32_t window_flags = SDL_GetWindowFlags(bd->Window);
+            if (window_flags & SDL_WINDOW_FULLSCREEN)
+            {
+              SDL_GetMouseState(&mouse_x_global, &mouse_y_global);
+            }
+            #endif
+
             SDL_GetWindowPosition(bd->Window, &window_x, &window_y);
             io.AddMousePosEvent((float)(mouse_x_global - window_x), (float)(mouse_y_global - window_y));
         }
