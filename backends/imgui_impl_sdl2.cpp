@@ -622,8 +622,7 @@ static void ImGui_ImplSDL2_UpdateMouseData()
             SDL_GetWindowPosition(bd->Window, &window_x, &window_y);
 #ifdef __APPLE__
             // Hack to fix Retina mouse coordinates on Mac
-            int w, h;
-            int display_w, display_h;
+            int w, h, display_w, display_h;
             SDL_GetWindowSize(bd->Window, &w, &h);
             if (SDL_GetWindowFlags(bd->Window) & SDL_WINDOW_MINIMIZED)
                 w = h = 0;
@@ -631,16 +630,12 @@ static void ImGui_ImplSDL2_UpdateMouseData()
                 SDL_GetRendererOutputSize(bd->Renderer, &display_w, &display_h);
             else
                 SDL_GL_GetDrawableSize(bd->Window, &display_w, &display_h);
+            float scale = display_h / h;
             
-            if (display_h != h)
-            {
-                io.AddMousePosEvent((float)2*(mouse_x_global - window_x), (float)2*(mouse_y_global - window_y));
-            }
-            else
+            io.AddMousePosEvent((float)scale * (mouse_x_global - window_x), (float)scale * (mouse_y_global - window_y));
+#else
+            io.AddMousePosEvent((float)(mouse_x_global - window_x), (float)(mouse_y_global - window_y));
 #endif
-            {
-                io.AddMousePosEvent((float)(mouse_x_global - window_x), (float)(mouse_y_global - window_y));
-            }
         }
     }
 }
